@@ -1,0 +1,84 @@
+﻿@using System.Globalization;
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models.PublishedContent;
+
+@{
+    ViewData["Title"] = @Model.Value("homeTitle");
+    Layout = "_Layout.cshtml";
+}
+<div class="gradinent-gray">
+    <section class="showcase container">
+        <img src="/images/showcase-img-1.svg" class="img-left" alt="showcase-img-1">
+        <div class="showcase-body">
+            <h1>@Model.Value("showcaseTitleLine1")</h1>
+            <h1>@Model.Value("showcaseTitleLine2")</h1>
+            <p>@Model.Value("showcaseText")</p>
+            <a class="btn-theme" href="#">
+                <span class="btn-theme-left"></span>
+                <span class="btn-theme-right"></span>
+                @Model.Value("showcaseButtonText")
+            </a>
+        </div>
+        <img src="/images/showcase-img-2.svg" class="img-right" alt="showcase-img-2">
+    </section>
+</div>
+
+<section class="featured-products">
+    <div class="container">
+        <p class="featured-products-title">@Model.Value("featuredProductTitle")</p>
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+
+            @{
+                var selection = Umbraco.Content(Guid.Parse("bc8c2e1a-138b-4e7e-a402-a6c107186db9"))
+                .ChildrenOfType("product")
+                .Where(x => x.IsVisible());
+            }
+
+            @foreach (var item in selection)
+            {
+                var thumbnailImage = item.Value<IPublishedContent>("productThumbnail");
+                <div class="col">
+                    <div class="card">
+                        <div class="img">
+                            <img src="@thumbnailImage.Url()" alt="">
+                            <div class="card-menu">
+                                <a href="#"><i class="fa-regular fa-bag-shopping"></i></a>
+                            </div>
+                            <a class="btn-theme btn-card-theme" href="#">
+                                <span class="btn-theme-left"></span>
+                                <span class="btn-theme-right"></span>
+                                QUICK VIEW
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-category">@item.Value("productCategory")</p>
+                            <h5 class="card-title">@item.Value("productName")</h5>
+                            <p class="card-rating">
+                                @{
+                                    var rating = item.Value<int>("productRating");
+                                }
+                                @for (int i = 1; i < 6; i++)
+                                {
+                                    if (i <= rating)
+                                    {
+                                        <i class="fa-sharp fa-solid fa-star"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa-sharp fa-solid fa-star card-rating-gray"></i>
+                                    }
+                                }
+                            </p>
+                            @{
+                                var price = item.Value<decimal>("productPrice").ToString("C", new CultureInfo("sv-SE"));
+                            }
+                            <p class="card-price">@price</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

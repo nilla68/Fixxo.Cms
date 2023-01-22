@@ -1,0 +1,46 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Contact>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    ViewData["Title"] = @Model.Value("contactTitle");
+	Layout = "_Layout.cshtml";
+}
+
+   <partial name="_Breadcrumb" />
+
+    <section class="map">
+        <iframe class="google-map" src="@Model.Value("contactGoogleMapsUrl")" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </section>
+
+    <section class="contact-form" >
+        <div class="container">
+            <h2>@Model.Value("contactHeadline")</h2>
+            
+            <p class="my-5">
+                @Model.Value("contactAddressInformation")
+            </p>
+            
+            <form onsubmit="submitForm(event)" novalidate>
+                <div>
+                    <input id="name" type="text" onkeyup="validate(event)" placeholder="@Model.Value("contactNamePlaceholder")">
+                    <div id="nameErrorMessage" class="errorMessage"></div>
+                </div>
+                <div>
+                    <input id="email" type="email" onkeyup="validate(event)" placeholder="@Model.Value("contactEmailPlaceholder")">
+                    <div id="emailErrorMessage" class="errorMessage"></div>
+                </div>
+                
+                <div class="textarea">
+                    <textarea id="comment" onkeyup="validate(event)" placeholder="@Model.Value("contactCommentsPlaceholder")"></textarea>
+                    <div id="commentErrorMessage" class="errorMessage"></div>
+                </div>
+                <div>
+                    <button type="submit" class="btn-theme">
+                        <span class="corner-topLeft"></span>
+                        <span class="corner-bottomRight"></span>
+                        @Model.Value("contactPostCommentsButtonText")
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>

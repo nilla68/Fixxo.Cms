@@ -1,0 +1,30 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using Umbraco.Cms.Core
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Core.Routing
+@using Umbraco.Extensions
+
+@inject IPublishedValueFallback PublishedValueFallback
+@inject IPublishedUrlProvider PublishedUrlProvider
+
+@{
+    var site = Model.Root();
+    var pages = site.Children.Where(x => x.IsVisible(PublishedValueFallback) && x.Name != "HomeProducts").ToArray();
+}
+
+<nav class="navbar container">
+    <div class="logo">
+        Fixxo.
+    </div>
+    <div class="nav-links">
+        <a class="@(Model.Id == site.Id ? "__active" : null)" href="@site.Url()">@site.Name</a>
+        @foreach (var p in pages)
+        {
+            <a class="@(p.IsAncestorOrSelf(Model) ? "__active" : null)" href="@p.Url(PublishedUrlProvider)">@p.Name</a>
+        }
+
+    </div>
+    <div class="nav-icon-links">
+        <a href="#"><span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-theme">3</span><i class="fa-regular fa-bag-shopping"></i></a>
+    </div>
+</nav>
